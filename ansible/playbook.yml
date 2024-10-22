@@ -1,0 +1,17 @@
+---
+- hosts: webservers
+  become: true
+  tasks:
+    - name: Pull Docker image
+      docker_image:
+        name: my-app
+        tag: "{{ build_id }}"
+        source: pull
+
+    - name: Run the container
+      docker_container:
+        name: web_container
+        image: "my-app:{{ build_id }}"
+        state: started
+        ports:
+          - "80:80"
